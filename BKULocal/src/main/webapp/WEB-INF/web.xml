@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2011 by Graz University of Technology, Austria
+  MOCCA has been developed by the E-Government Innovation Center EGIZ, a joint
+  initiative of the Federal Chancellery Austria and Graz University of Technology.
+
+  Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+  the European Commission - subsequent versions of the EUPL (the "Licence");
+  You may not use this work except in compliance with the Licence.
+  You may obtain a copy of the Licence at:
+  http://www.osor.eu/eupl/
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the Licence is distributed on an "AS IS" basis,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the Licence for the specific language governing permissions and
+  limitations under the Licence.
+
+  This product combines work with different licenses. See the "NOTICE" text
+  file for details on the various modules and licenses.
+  The "NOTICE" text file is part of the distribution. Any derivative works
+  that you distribute must include a readable copy of the "NOTICE" text file.
+-->
+<web-app id="bkulocal" version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <display-name>http-security-layer-request</display-name>
+  
+  <listener>
+    <listener-class>at.gv.egiz.bku.local.webapp.MoccaContextListener</listener-class>
+  </listener>
+  
+  <!--  Begin Spring Config -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>configurationResource</param-name>
+		<param-value>file:${user.home}/.mocca/conf/configuration.xml</param-value>
+	</context-param>
+  <!--  End Spring Config -->
+  
+  <!--  Begin BKU Config -->
+  <servlet>
+    <servlet-name>BKUServlet</servlet-name>
+    <servlet-class>at.gv.egiz.bku.local.webapp.BKURequestHandler</servlet-class>
+  </servlet>
+    <servlet>
+        <servlet-name>PINManagementServlet</servlet-name>
+        <servlet-class>at.gv.egiz.bku.local.webapp.PINManagementServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>IdentityLinkServlet</servlet-name>
+        <servlet-class>at.gv.egiz.bku.local.webapp.IdentityLinkServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetCertificateServlet</servlet-name>
+        <servlet-class>at.gv.egiz.bku.local.webapp.GetCertificateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetHardwareInfoServlet</servlet-name>
+        <servlet-class>at.gv.egiz.bku.local.webapp.GetHardwareInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    <servlet-name>BKUServlet</servlet-name>
+    <url-pattern>/http-security-layer-request</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>BKUServlet</servlet-name>
+    <url-pattern>/https-security-layer-request</url-pattern>
+  </servlet-mapping>
+  <!--  Begin BKU Config -->
+    <servlet-mapping>
+        <servlet-name>PINManagementServlet</servlet-name>
+        <url-pattern>/PINManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IdentityLinkServlet</servlet-name>
+        <url-pattern>/IdentityLink</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCertificateServlet</servlet-name>
+        <url-pattern>/GetCertificate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetHardwareInfoServlet</servlet-name>
+        <url-pattern>/GetHardwareinfo</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/help/404.html</location>
+  </error-page>
+</web-app>

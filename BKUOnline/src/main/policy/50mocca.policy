@@ -1,0 +1,288 @@
+// Copyright 2011 by Graz University of Technology, Austria
+// MOCCA has been developed by the E-Government Innovation Center EGIZ, a joint
+// initiative of the Federal Chancellery Austria and Graz University of Technology.
+//
+// Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+// the European Commission - subsequent versions of the EUPL (the "Licence");
+// You may not use this work except in compliance with the Licence.
+// You may obtain a copy of the Licence at:
+// http://www.osor.eu/eupl/
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the Licence is distributed on an "AS IS" basis,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the Licence for the specific language governing permissions and
+// limitations under the Licence.
+//
+// This product combines work with different licenses. See the "NOTICE" text
+// file for details on the various modules and licenses.
+// The "NOTICE" text file is part of the distribution. Any derivative works
+// that you distribute must include a readable copy of the "NOTICE" text file.
+//
+//
+// =========================================================================
+// || IMPORTANT: REVIEW AND ADAPT TO YOUR NEEDS PRIOR TO INSTALLATION
+// =========================================================================
+//
+// (set -Djava.security.debug=access,failure and search for "denied" (failed))
+//
+// ========== MOCCA CODE PERMISSIONS =======================================
+//
+// replace  ${catalina.base}/webapps/bkuonline
+//    with  ${catalina.base}/webapps/<mocca_context>
+// replace  ${catalina.base}/work/Catalina/localhost/bkuonline
+//    with  ${catalina.base}/work/Catalina/localhost/<mocca_context> (the path to the compiled JSPs, excl. package dir: org/apache/jsp/)
+// replace  version info in 
+//          ${catalina.base}/webapps/bkuonline/WEB-INF/lib/utils-1.3.7.jar and
+//          ${catalina.base}/webapps/bkuonline/WEB-INF/lib/bkucommon-1.3.7.jar
+//    with  current version
+// replace  www.sozialversicherung.gv.at:443
+//    with  <DataURL_host:DataURL_port>
+// replace  localhost:8080
+//    with  <StylesheetURL_host:StylesheetURL_port>
+// replace  www.xslt-stylesheet-include-url.org:80
+//    with  <XSL_include_URL>
+// replace  ../conf/secret.xml
+//    with  <any_resource_you_would_like_to_grant_XSLTs_document()_function_access_to>
+//
+// replace  www.a-trust.at and ksp.ecard.sozialversicherung.gv.at
+//    with  <idLink_template_download_URL>, currently:
+//          A-Trust: http://www.a-trust.at/zmr/persb204.xsl
+//          Verwaltungssignatur: http://ksp.ecard.sozialversicherung.gv.at/ePortal/public/xslt/ExpandIdLink-2_0.xslt
+// replace  ldap.a-trust.at:389, ocsp.a-trust.at:80 and ocsp.ecard.sozialversicherung.at:80
+//    with  <certificate_revocation_authority_endpoint> (OCSP, CRLs)
+//
+
+// =========== container grants required by MOCCA
+//
+grant codeBase "file:${catalina.home}/bin/tomcat-juli.jar" {
+      permission java.lang.RuntimePermission "accessClassInPackage.sun.util.logging.resources";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/logging.properties", "read";
+      // (for manager webapp)
+      // permission java.lang.RuntimePermission "setContextClassLoader";
+};
+
+grant codeBase "file:${catalina.base}/work/Catalina/localhost/bkuonline" {
+      permission java.io.FilePermission "/helpfiles/-", "read";
+      permission java.lang.RuntimePermission "defineClassInPackage.org.apache.jasper.runtime";
+};
+
+// =========== MOCCA grants
+//
+grant codeBase "file:${catalina.base}/webapps/bkuonline/-" {
+      permission java.io.FilePermission "${catalina.base}/logs", "read, write";
+      permission java.io.FilePermission "${catalina.base}/logs/*", "read, write";
+      permission java.io.FilePermission "${catalina.base}/logs/*", "delete";
+
+      // DataURLs
+      permission java.net.SocketPermission "apps.egiz.gv.at:443", "connect, resolve";
+      permission java.net.SocketPermission "www.buergerkarte.at:443", "connect, resolve";
+      permission java.net.SocketPermission "www.sozialversicherung.gv.at:443", "connect, resolve";
+      permission java.net.SocketPermission "www.sozialversicherung.at:443", "connect, resolve";
+      permission java.net.SocketPermission "www.int.esv.sozialversicherung.at:443", "connect, resolve";
+      permission java.net.SocketPermission "www.int.esv.sozialversicherung.gv.at:443", "connect, resolve";
+      permission java.net.SocketPermission "ooegkk.int.esv.sozialversicherung.at:443", "connect, resolve";
+      //permission java.net.SocketPermission "www2.sozialversicherung.gv.at:443", "connect, resolve";
+      //permission java.net.SocketPermission "www2.sozialversicherung.at:443", "connect, resolve";
+      
+      // other resources (crls, persb.xsl, ...)
+      permission java.net.SocketPermission "www.a-trust.at:80", "connect, resolve";
+      permission java.net.SocketPermission "ksp.ecard.sozialversicherung.gv.at:80", "connect,resolve";
+      permission java.net.SocketPermission "ldap.a-trust.at:389", "connect, resolve";
+      permission java.net.SocketPermission "ocsp.a-trust.at:80", "connect, resolve";
+      permission java.net.SocketPermission "ocsp.ecard.sozialversicherung.at:80", "connect, resolve";
+//      permission java.net.SocketPermission "localhost:8080", "connect, resolve";
+//      permission java.net.SocketPermission "www.xslt-stylesheet-include-url.org:80", "connect, resolve";
+
+      permission java.security.SecurityPermission "insertProvider.IAIK";
+      permission java.security.SecurityPermission "putProviderProperty.IAIK";
+      permission java.security.SecurityPermission "removeProvider.IAIK";
+      permission java.security.SecurityPermission "insertProvider.IAIK_ECC";
+      permission java.security.SecurityPermission "putProviderProperty.IAIK_ECC";
+      permission java.security.SecurityPermission "removeProvider.IAIK_ECC";
+      permission java.security.SecurityPermission "insertProvider.XSECT";
+      permission java.security.SecurityPermission "putProviderProperty.XSECT";
+      permission java.security.SecurityPermission "removeProvider.XSECT";
+      permission java.security.SecurityPermission "insertProvider.STAL";
+      permission java.security.SecurityPermission "putProviderProperty.STAL";
+      // XMLDSig is moved backwards by XSECT
+      permission java.security.SecurityPermission "insertProvider.XMLDSig";
+      permission java.security.SecurityPermission "removeProvider.XMLDSig";
+
+      permission java.util.PropertyPermission "*", "read";
+      permission java.lang.RuntimePermission "accessDeclaredMembers";
+      permission java.lang.RuntimePermission "getClassLoader";
+      permission java.lang.RuntimePermission "getProtectionDomain";
+      //bkucommon,pki
+      permission java.lang.RuntimePermission "accessClassInPackage.sun.net.www.protocol.ldap";
+      //jax-ws jaxb
+      permission java.lang.RuntimePermission "accessClassInPackage.sun.util.logging.resources";
+      //permission java.lang.RuntimePermission "modifyThread";
+      //permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+      permission java.net.NetPermission "specifyStreamHandler";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/classes/-" {
+//      permission java.util.PropertyPermission "com.sun.xml.ws.fault.SOAPFaultBuilder.disableCaptureStackTrace", "write";
+//      permission java.util.PropertyPermission "com.sun.xml.ws.transport.http.HttpAdapter.dump", "write";
+
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/-", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/toBeAdded/-", "delete";
+
+      permission java.lang.RuntimePermission "defineClassInPackage.java.lang";
+      permission java.util.PropertyPermission "*", "read, write";
+      permission java.lang.RuntimePermission "modifyThread";
+      permission java.lang.RuntimePermission "setFactory";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/utils-1.3.7.jar" {
+//      permission java.lang.RuntimePermission "accessDeclaredMembers";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/bkucommon-1.3.7.jar" {
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/-", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/toBeAdded/-", "delete";
+      permission java.io.FilePermission "${catalina.base}/temp/*", "read, write";
+//      permission java.io.FilePermission "../conf/secret.xml", "read";
+      permission java.util.PropertyPermission "*", "read, write";
+      permission java.lang.RuntimePermission "modifyThread";
+      permission java.lang.RuntimePermission "setFactory";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/iaik_jce_full_signed-5.01.jar" {
+      permission java.util.PropertyPermission "*", "read, write";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/iaik_xsect-1.17.jar" {
+      permission java.util.PropertyPermission "*", "read, write";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/iaik_pki-1.0-MOCCA.jar" {
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/-", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/toBeAdded/-", "delete";
+      //permission java.net.NetPermission "specifyStreamHandler";
+      //permission java.lang.RuntimePermission "accessClassInPackage.sun.net.www.protocol.ldap";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/xalan-2.7.1.jar" {
+      permission java.io.FilePermission "${java.home}/lib/xalan.properties", "read";
+      //permission java.lang.RuntimePermission "getClassLoader";
+};
+
+// allow xsl:include from the specified URL
+//grant codeBase "jar:file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/xalan-2.7.1.jar!/org/apache/xalan/processor/-" {
+//      permission java.net.SocketPermission "www.xslt-stylesheet-include-url.org:80", "connect, resolve";
+//};
+
+// allow XSLT document function to reference the specified URL
+//grant codeBase "jar:file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/xalan-2.7.1.jar!/org/apache/xalan/xsltc/dom/LoadDocument.class" {
+//      permission java.io.FilePermission "../conf/secret.xml", "read";
+//};
+
+// use tomcat/jre endorsed xerces instead
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/xercesImpl-2.9.1.jar" {
+      permission java.io.FilePermission "${java.home}/lib/xerces.properties", "read";
+//      permission java.io.FilePermission "../conf/secret.xml", "read";
+//      permission java.net.SocketPermission "www.xslt-stylesheet-include-url.org:80", "connect, resolve";
+      permission java.io.FilePermission "/WEB-INF/classes/-", "read";
+      permission java.lang.RuntimePermission "accessClassInPackage.org.apache.catalina";
+      permission java.lang.RuntimePermission "accessClassInPackage.org.apache.catalina.*";
+      //permission java.lang.RuntimePermission "accessDeclaredMembers";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/commons-logging-1.1.1.jar" {
+      permission java.lang.RuntimePermission "defineClassInPackage.java.lang";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/log4j-1.2.17.jar" {
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/log4j.properties", "read";
+      permission java.lang.RuntimePermission "defineClassInPackage.java.lang";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/spring-core-2.5.5.jar" {
+      //permission java.lang.RuntimePermission "accessDeclaredMembers";
+      permission java.lang.RuntimePermission "modifyThread";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/spring-web-2.5.5.jar" {
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/-", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/toBeAdded/-", "delete";
+      permission java.util.PropertyPermission "*", "read, write";
+      //permission java.lang.RuntimePermission "accessDeclaredMembers";
+      permission java.lang.RuntimePermission "modifyThread";
+      permission java.lang.RuntimePermission "setFactory";
+      //permission java.lang.RuntimePermission "getProtectionDomain";
+      permission java.lang.RuntimePermission "defineClassInPackage.java.lang";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/spring-beans-2.5.5.jar" {
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/-", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/toBeAdded/-", "delete";
+      permission java.util.PropertyPermission "*", "read, write";
+      //permission java.lang.RuntimePermission "accessDeclaredMembers";
+      permission java.lang.RuntimePermission "setFactory";
+      permission java.lang.RuntimePermission "getProtectionDomain";
+      permission java.lang.RuntimePermission "defineClassInPackage.java.lang";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+};
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/spring-context-2.5.5.jar" {
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/-", "write";
+      permission java.io.FilePermission "${catalina.base}/webapps/bkuonline/WEB-INF/classes/at/gv/egiz/bku/certs/certStore/toBeAdded/-", "delete";
+      permission java.util.PropertyPermission "*", "read, write";
+      //permission java.lang.RuntimePermission "accessDeclaredMembers";
+      permission java.lang.RuntimePermission "modifyThread";
+      permission java.lang.RuntimePermission "setFactory";
+      permission java.lang.RuntimePermission "getProtectionDomain";
+      permission java.lang.RuntimePermission "defineClassInPackage.java.lang";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/jaxws-rt-2.1.5.jar" {
+      // need write access to set disableCaptureStackTrace and HttpAdapter.dump
+      permission java.util.PropertyPermission "com.sun.xml.ws.*", "read, write";
+      //permission java.util.PropertyPermission "com.sun.xml.bind.*", "read";
+      //permission java.util.PropertyPermission "javax.xml.soap.*", "read";
+      //permission java.util.PropertyPermission "javax.activation.*", "read";
+      //permission java.util.PropertyPermission "xml.catalog.*", "read";
+      //permission java.util.PropertyPermission "user.dir", "read";
+      //permission java.util.PropertyPermission "user.home", "read";
+      permission java.io.FilePermission "${java.home}/lib/jaxm.properties", "read";
+      permission java.io.FilePermission "${java.home}/lib/mailcap", "read";
+      permission java.io.FilePermission "${user.home}/.mailcap", "read";
+      permission java.io.FilePermission "basename", "read";
+      permission java.io.FilePermission "${catalina.home}/bin/xcatalog", "read";
+      permission java.io.FilePermission "${catalina.home}/temp/xcatalog", "read";
+      permission java.io.FilePermission "/WEB-INF/classes/-", "read";
+      //permission java.lang.RuntimePermission "accessDeclaredMembers";
+      //permission java.lang.RuntimePermission "accessClassInPackage.sun.util.logging.resources";
+      permission java.lang.RuntimePermission "setContextClassLoader";
+      permission javax.management.MBeanServerPermission "createMBeanServer";
+      permission javax.management.MBeanPermission "com.sun.xml.ws.*", "registerMBean";
+      permission javax.management.MBeanTrustPermission "register";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+};
+
+grant codeBase "file:${catalina.base}/webapps/bkuonline/WEB-INF/lib/jaxb-impl-2.1.9.jar" {
+      //permission java.lang.RuntimePermission "accessClassInPackage.sun.util.logging.resources";
+      permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+//      permission java.lang.RuntimePermission "accessDeclaredMembers";
+//      permission java.util.PropertyPermission "com.sun.xml.bind.v2.*", "read";
+//      permission java.util.PropertyPermission "user.dir", "read";
+      permission java.io.FilePermission "/WEB-INF/classes/-", "read";
+};
+
+// ======== NETBEANS
+
+grant codeBase "file:${catalina.base}/nblib/-" {
+      permission java.security.AllPermission;
+};

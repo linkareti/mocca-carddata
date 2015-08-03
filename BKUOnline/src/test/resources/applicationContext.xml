@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2011 by Graz University of Technology, Austria
+  MOCCA has been developed by the E-Government Innovation Center EGIZ, a joint
+  initiative of the Federal Chancellery Austria and Graz University of Technology.
+
+  Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+  the European Commission - subsequent versions of the EUPL (the "Licence");
+  You may not use this work except in compliance with the Licence.
+  You may obtain a copy of the Licence at:
+  http://www.osor.eu/eupl/
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the Licence is distributed on an "AS IS" basis,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the Licence for the specific language governing permissions and
+  limitations under the Licence.
+
+  This product combines work with different licenses. See the "NOTICE" text
+  file for details on the various modules and licenses.
+  The "NOTICE" text file is part of the distribution. Any derivative works
+  that you distribute must include a readable copy of the "NOTICE" text file.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<bean id="STALFactory" class="at.gv.egiz.stal.service.impl.RequestBrokerSTALFactory"
+		scope="singleton" />
+
+	<bean id="accessController" class="at.gv.egiz.bku.online.accesscontroller.SpringSecurityManager"
+		scope="singleton" init-method="init">
+		<property name="config" ref="configurator"/>
+		</bean>
+
+	<bean id="commandInvoker" class="at.gv.egiz.bku.binding.SLCommandInvokerImpl">
+		<property name="securityManager" ref="accessController" />
+	</bean>
+
+	<bean id="bindingProcessorManager" class="at.gv.egiz.bku.binding.BindingProcessorManagerImpl"
+		scope="singleton">
+		<constructor-arg ref="STALFactory"></constructor-arg>
+		<constructor-arg ref="commandInvoker"></constructor-arg>
+	</bean>
+
+	<bean
+		class="org.springframework.web.context.support.ServletContextAttributeExporter">
+		<property name="attributes">
+			<map>
+				<entry key="bindingProcessorManager">
+					<ref bean="bindingProcessorManager" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- Configure Configuration -->
+	<bean id="certValidator" class="at.gv.egiz.bku.conf.CertValidatorImpl"></bean>
+	<bean id="configurator" class="at.gv.egiz.bku.online.conf.SpringConfigurator"
+		scope="singleton" init-method="configure">
+		<property name="resource" value="classpath:at/gv/egiz/bku/online/conf/defaultConf.properties"/>
+		<property name="certValidator" ref="certValidator"></property>
+	</bean>
+
+</beans>
