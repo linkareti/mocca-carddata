@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  * @author bnazare
  */
-class Utils {
+class PtEidUtils {
 
     private static final Charset CARD_CHARSET = Charset.forName("UTF-8");
     private static final char CARD_PADDING = '\0';

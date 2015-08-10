@@ -1,9 +1,11 @@
 package at.gv.egiz.smcc;
 
+import at.gv.egiz.smcc.PtEidUtils;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class PTEID_ADDR {
+public class PtEidAddr {
 
     //EF05 ADDRESS
     // shared address attributes
@@ -102,44 +104,44 @@ public class PTEID_ADDR {
     public String postalF;
     public String numMorF;
 
-    public static PTEID_ADDR parseAddr(byte[] buf) {
+    public static PtEidAddr parseAddr(byte[] buf) {
 
-        PTEID_ADDR addr = new PTEID_ADDR();
+        PtEidAddr addr = new PtEidAddr();
 
-        addr.addrType = Utils.extractString(buf, ADDRESS_TYPE_OFFSET, PTEID_ADDR_TYPE_LEN);
-        addr.country = Utils.extractString(buf, ADDRESS_COUNTRY_OFFSET, PTEID_ADDR_COUNTRY_LEN);
+        addr.addrType = PtEidUtils.extractString(buf, ADDRESS_TYPE_OFFSET, PTEID_ADDR_TYPE_LEN);
+        addr.country = PtEidUtils.extractString(buf, ADDRESS_COUNTRY_OFFSET, PTEID_ADDR_COUNTRY_LEN);
 
         // check if the address is national it can be checked by addrType or by country
         if (ADDR_TYPE_NATIONAL.equals(addr.addrType)) {
-            addr.district = Utils.extractString(buf, DISTRICT_CODE_OFFSET, PTEID_DISTRICT_LEN);
-            addr.districtDesc = Utils.extractString(buf, DISTRICT_DESCRIPTION_OFFSET, PTEID_DISTRICT_DESC_LEN);
-            addr.municipality = Utils.extractString(buf, MUNICIPALITY_CODE_OFFSET, PTEID_DISTRICT_CON_LEN);
-            addr.municipalityDesc = Utils.extractString(buf, MUNICIPALITY_DESCRIPTION_OFFSET, PTEID_DISTRICT_CON_DESC_LEN);
-            addr.freguesia = Utils.extractString(buf, CIVIL_PARISH_CODE_OFFSET, PTEID_DISTRICT_FREG_LEN);
-            addr.freguesiaDesc = Utils.extractString(buf, CIVIL_PARISH_DESCRIPTION_OFFSET, PTEID_DISTRICT_FREG_DESC_LEN);
-            addr.streettypeAbbr = Utils.extractString(buf, ABBR_STREET_TYPE_OFFSET, PTEID_ROAD_ABBR_LEN);
-            addr.streettype = Utils.extractString(buf, STREET_TYPE_OFFSET, PTEID_ROAD_LEN);
-            addr.street = Utils.extractString(buf, STREET_NAME_OFFSET, PTEID_ROAD_DESIG_LEN);
-            addr.buildingAbbr = Utils.extractString(buf, ABBR_BUILDING_TYPE_OFFSET, PTEID_HOUSE_ABBR_LEN);
-            addr.building = Utils.extractString(buf, BUILDING_TYPE_OFFSET, PTEID_HOUSE_LEN);
-            addr.door = Utils.extractString(buf, DOOR_NUMBER_OFFSET, PTEID_NUMDOOR_LEN);
-            addr.floor = Utils.extractString(buf, FLOOR_OFFSET, PTEID_FLOOR_LEN);
-            addr.side = Utils.extractString(buf, SIDE_OFFSET, PTEID_SIDE_LEN);
-            addr.place = Utils.extractString(buf, PLACE_OFFSET, PTEID_PLACE_LEN);
-            addr.locality = Utils.extractString(buf, LOCALITY_OFFSET, PTEID_LOCALITY_LEN);
-            addr.cp4 = Utils.extractString(buf, POSTAL_CODE_CP4_OFFSET, PTEID_CP4_LEN);
-            addr.cp3 = Utils.extractString(buf, POSTAL_CODE_CP3_OFFSET, PTEID_CP3_LEN);
-            addr.postal = Utils.extractString(buf, POSTAL_LOCALITY_OFFSET, PTEID_POSTAL_LEN);
-            addr.numMor = Utils.extractString(buf, ADDRESS_NUMBER_OFFSET, PTEID_NUMMOR_LEN);
+            addr.district = PtEidUtils.extractString(buf, DISTRICT_CODE_OFFSET, PTEID_DISTRICT_LEN);
+            addr.districtDesc = PtEidUtils.extractString(buf, DISTRICT_DESCRIPTION_OFFSET, PTEID_DISTRICT_DESC_LEN);
+            addr.municipality = PtEidUtils.extractString(buf, MUNICIPALITY_CODE_OFFSET, PTEID_DISTRICT_CON_LEN);
+            addr.municipalityDesc = PtEidUtils.extractString(buf, MUNICIPALITY_DESCRIPTION_OFFSET, PTEID_DISTRICT_CON_DESC_LEN);
+            addr.freguesia = PtEidUtils.extractString(buf, CIVIL_PARISH_CODE_OFFSET, PTEID_DISTRICT_FREG_LEN);
+            addr.freguesiaDesc = PtEidUtils.extractString(buf, CIVIL_PARISH_DESCRIPTION_OFFSET, PTEID_DISTRICT_FREG_DESC_LEN);
+            addr.streettypeAbbr = PtEidUtils.extractString(buf, ABBR_STREET_TYPE_OFFSET, PTEID_ROAD_ABBR_LEN);
+            addr.streettype = PtEidUtils.extractString(buf, STREET_TYPE_OFFSET, PTEID_ROAD_LEN);
+            addr.street = PtEidUtils.extractString(buf, STREET_NAME_OFFSET, PTEID_ROAD_DESIG_LEN);
+            addr.buildingAbbr = PtEidUtils.extractString(buf, ABBR_BUILDING_TYPE_OFFSET, PTEID_HOUSE_ABBR_LEN);
+            addr.building = PtEidUtils.extractString(buf, BUILDING_TYPE_OFFSET, PTEID_HOUSE_LEN);
+            addr.door = PtEidUtils.extractString(buf, DOOR_NUMBER_OFFSET, PTEID_NUMDOOR_LEN);
+            addr.floor = PtEidUtils.extractString(buf, FLOOR_OFFSET, PTEID_FLOOR_LEN);
+            addr.side = PtEidUtils.extractString(buf, SIDE_OFFSET, PTEID_SIDE_LEN);
+            addr.place = PtEidUtils.extractString(buf, PLACE_OFFSET, PTEID_PLACE_LEN);
+            addr.locality = PtEidUtils.extractString(buf, LOCALITY_OFFSET, PTEID_LOCALITY_LEN);
+            addr.cp4 = PtEidUtils.extractString(buf, POSTAL_CODE_CP4_OFFSET, PTEID_CP4_LEN);
+            addr.cp3 = PtEidUtils.extractString(buf, POSTAL_CODE_CP3_OFFSET, PTEID_CP3_LEN);
+            addr.postal = PtEidUtils.extractString(buf, POSTAL_LOCALITY_OFFSET, PTEID_POSTAL_LEN);
+            addr.numMor = PtEidUtils.extractString(buf, ADDRESS_NUMBER_OFFSET, PTEID_NUMMOR_LEN);
 
         } else { // foreign address
-            addr.countryDescF = Utils.extractString(buf, FOREIGN_COUNTRY_DESCRIPTION_OFFSET, PTEID_ADDR_COUNTRYF_DESC_LEN);
-            addr.addressF = Utils.extractString(buf, FOREIGN_ADDRESS_OFFSET, PTEID_ADDRF_LEN);
-            addr.cityF = Utils.extractString(buf, FOREIGN_CITY_OFFSET, PTEID_CITYF_LEN);
-            addr.regioF = Utils.extractString(buf, FOREIGN_REGION_OFFSET, PTEID_REGIOF_LEN);
-            addr.localityF = Utils.extractString(buf, FOREIGN_LOCALITY_OFFSET, PTEID_LOCALITYF_LEN);
-            addr.postalF = Utils.extractString(buf, FOREIGN_POSTAL_CODE_OFFSET, PTEID_POSTALF_LEN);
-            addr.numMorF = Utils.extractString(buf, FOREIGN_ADDRESS_NUMBER_OFFSET, PTEID_NUMMORF_LEN);
+            addr.countryDescF = PtEidUtils.extractString(buf, FOREIGN_COUNTRY_DESCRIPTION_OFFSET, PTEID_ADDR_COUNTRYF_DESC_LEN);
+            addr.addressF = PtEidUtils.extractString(buf, FOREIGN_ADDRESS_OFFSET, PTEID_ADDRF_LEN);
+            addr.cityF = PtEidUtils.extractString(buf, FOREIGN_CITY_OFFSET, PTEID_CITYF_LEN);
+            addr.regioF = PtEidUtils.extractString(buf, FOREIGN_REGION_OFFSET, PTEID_REGIOF_LEN);
+            addr.localityF = PtEidUtils.extractString(buf, FOREIGN_LOCALITY_OFFSET, PTEID_LOCALITYF_LEN);
+            addr.postalF = PtEidUtils.extractString(buf, FOREIGN_POSTAL_CODE_OFFSET, PTEID_POSTALF_LEN);
+            addr.numMorF = PtEidUtils.extractString(buf, FOREIGN_ADDRESS_NUMBER_OFFSET, PTEID_NUMMORF_LEN);
         }
 
         return addr;

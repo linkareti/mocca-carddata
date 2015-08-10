@@ -26,9 +26,11 @@
 package at.gv.egiz.smcc;
 
 import at.gv.egiz.smcc.pin.gui.PINGUI;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.smartcardio.Card;
 import javax.smartcardio.CardTerminal;
@@ -90,11 +92,6 @@ public interface SignatureCard {
   public byte[] getCertificate(KeyboxName keyboxName, PINGUI pinGUI)
       throws SignatureCardException, InterruptedException;
   
-  
-   public byte[] getCitizenData(KeyboxName keyboxName, PINGUI provider) throws SignatureCardException, InterruptedException ;
-  
-   public byte[] getCitizenAddr(KeyboxName keyboxName, PINGUI provider) throws SignatureCardException, InterruptedException;
-   
   public void disconnect(boolean reset);
   
   /**
@@ -136,5 +133,14 @@ public interface SignatureCard {
    */
   public void setLocale(Locale locale);
 
+    /**
+     *
+     * Gets the specified datasets from card.
+     * @param datasets
+     * @return
+     */
+    Map<CardDataSet, Map<String, ?>> getCardData(
+            KeyboxName keyboxName, PINGUI pinGUI, CardDataSet... datasets)
+            throws SignatureCardException, InterruptedException;
 
 }

@@ -49,6 +49,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.smartcardio.Card;
 import javax.smartcardio.CardTerminal;
@@ -126,6 +127,7 @@ public class SWCard implements SignatureCard {
     SWCard.swCardDir = swCardDir;
   }
 
+  @Override
   public void init(Card card, CardTerminal cardTerminal) {
   }
   
@@ -134,6 +136,7 @@ public class SWCard implements SignatureCard {
     return null;
   }
 
+  @Override
   public String getTerminalName() {
 	  return null;
   }
@@ -481,12 +484,11 @@ public class SWCard implements SignatureCard {
   }
 
     @Override
-    public byte[] getCitizenData(KeyboxName keyboxName, PINGUI provider) throws SignatureCardException, InterruptedException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Map<CardDataSet, Map<String, ?>> getCardData(
+            KeyboxName keyboxName, PINGUI pinGUI, CardDataSet... datasets)
+            throws SignatureCardException, InterruptedException {
+        
+        throw new IllegalArgumentException("Retrieving card data not supported.");
     }
-
-    @Override
-    public byte[] getCitizenAddr(KeyboxName keyboxName, PINGUI provider) throws SignatureCardException, InterruptedException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

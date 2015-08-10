@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.EnumMap;
+import java.util.Map;
 
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
@@ -64,6 +66,8 @@ public class PtEidCard extends AbstractSignatureCard {
     new PinInfo(4, 4, "[0-9]",
       "at/gv/egiz/smcc/PtEidCard", "addr.pin", (byte) 0x83, DF_ISSUES, PinInfo.UNKNOWN_RETRIES);
   
+  private static final int ID_DATA_LENGHT = 1372;//lenght of all data for id purposes
+  
   @Override
   public byte[] getCertificate(KeyboxName keyboxName, PINGUI provider)
       throws SignatureCardException, InterruptedException {
@@ -92,7 +96,42 @@ public class PtEidCard extends AbstractSignatureCard {
 
   }
 
-    public byte[] getCitizenData(KeyboxName keyboxName, PINGUI provider) throws SignatureCardException, InterruptedException {
+    @Override
+    public Map<CardDataSet, Map<String, ?>> getCardData(
+            KeyboxName keyboxName, PINGUI pinGUI, CardDataSet... datasets)
+             throws SignatureCardException, InterruptedException {
+        
+        Map<CardDataSet, Map<String, ?>> result = new EnumMap<CardDataSet, Map<String, ?>>(CardDataSet.class);
+        
+        for (CardDataSet dataset : datasets) {
+            switch(dataset) {
+                case HOLDER_DATA:
+                    byte[] citizenData;
+                    citizenData = getCitizenData(keyboxName, pinGUI, ID_DATA_LENGHT);
+                    PtEidCitizenData pteid_id = PtEidCitizenData.parseId(citizenData);
+                    result.put(CardDataSet.HOLDER_DATA, pteid_id.getAllInfo());
+
+                    break;
+                case HOLDER_ADDRESS:
+                    byte[] citizenAddr;
+                    citizenAddr = getCitizenAddr(keyboxName, pinGUI);
+                    PtEidAddr pteid_addr = PtEidAddr.parseAddr(citizenAddr);
+                    result.put(CardDataSet.HOLDER_ADDRESS, pteid_addr.getAllInfo());
+
+                    break;
+                case HOLDER_PICTURE:
+                    citizenData = getCitizenData(keyboxName, pinGUI, -1);
+                    PtEidPic pteid_pic = PtEidPic.parsePic(citizenData);
+                    result.put(CardDataSet.HOLDER_PICTURE, pteid_pic.getPicture());
+
+                    break;
+            }
+        }
+        
+        return result; 
+    }
+
+    private byte[] getCitizenData(KeyboxName keyboxName, PINGUI provider, int hintMaxSize) throws SignatureCardException, InterruptedException {
         try {
             CardChannel channel = getCardChannel();
             // SELECT applet
@@ -101,7 +140,7 @@ public class PtEidCard extends AbstractSignatureCard {
             execSELECT_FID(channel, PtEidCard.DF_ISSUES);
             // SELECT EF_SIGN_CERT
             byte[] fcx = execSELECT_FID(channel, new byte[]{(byte) 239, (byte) 2});
-            int maxsize = ISO7816Utils.getLengthFromFCx(fcx);
+            int maxsize = hintMaxSize > 0 ? hintMaxSize : ISO7816Utils.getLengthFromFCx(fcx);
             // READ BINARY
             byte[] citizenData = ISO7816Utils.readTransparentFile(channel, maxsize);
             if (citizenData == null) {
@@ -111,11 +150,11 @@ public class PtEidCard extends AbstractSignatureCard {
         } catch (FileNotFoundException e) {
             throw new NotActivatedException();
         } catch (CardException e) {
-            log.info("Failed to get certificate.", e);
+            log.info("Failed to get data.", e);
             throw new SignatureCardException(e);
         }
     }
-  
+    
     public byte[] getCitizenAddr(KeyboxName keyboxName, PINGUI provider) throws SignatureCardException, InterruptedException {
         try {
             CardChannel channel = getCardChannel();

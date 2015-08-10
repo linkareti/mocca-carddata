@@ -1,9 +1,11 @@
 package at.gv.egiz.smcc;
 
+import at.gv.egiz.smcc.PtEidUtils;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class PTEID_ID {
+public class PtEidCitizenData {
 
     // EF02 IDENTIFICATION
     // identification attributes offsets
@@ -83,37 +85,37 @@ public class PTEID_ID {
     public String mrz2;
     public String mrz3;
 
-    public static PTEID_ID parseId(byte[] buf) {
+    public static PtEidCitizenData parseId(byte[] buf) {
 
-        PTEID_ID id = new PTEID_ID();
+        PtEidCitizenData id = new PtEidCitizenData();
 
-        id.deliveryEntity = Utils.extractString(buf, ISSUING_ENTITY_OFFSET, PTEID_DELIVERY_ENTITY_LEN);
-        id.country = Utils.extractString(buf, COUNTRY_OFFSET, PTEID_COUNTRY_LEN);
-        id.documentType = Utils.extractString(buf, DOCUMENT_TYPE_OFFSET, PTEID_DOCUMENT_TYPE_LEN);
-        id.cardNumber = Utils.extractString(buf, CARD_NUMBER_OFFSET, PTEID_CARDNUMBER_LEN);
-        id.cardNumberPAN = Utils.extractString(buf, CARD_NUMBER_PAN_OFFSET, PTEID_CARDNUMBER_PAN_LEN);
-        id.cardVersion = Utils.extractString(buf, CARD_VERSION_OFFSET, PTEID_CARDVERSION_LEN);
-        id.deliveryDate = Utils.extractString(buf, ISSUING_DATE_OFFSET, PTEID_DATE_LEN);
-        id.locale = Utils.extractString(buf, LOCAL_OF_REQUEST_OFFSET, PTEID_LOCALE_LEN);
-        id.validityDate = Utils.extractString(buf, EXPIRY_DATE_OFFSET, PTEID_DATE_LEN);
-        id.name = Utils.extractString(buf, SURNAME_OFFSET, PTEID_NAME_LEN);
-        id.firstname = Utils.extractString(buf, GIVEN_NAME_OFFSET, PTEID_NAME_LEN);
-        id.sex = Utils.extractString(buf, SEX_OFFSET, PTEID_SEX_LEN);
-        id.nationality = Utils.extractString(buf, NATIONALITY_OFFSET, PTEID_NATIONALITY_LEN);
-        id.birthDate = Utils.extractString(buf, DATE_OF_BIRTH_OFFSET, PTEID_DATE_LEN);
-        id.height = Utils.extractString(buf, HEIGHT_OFFSET, PTEID_HEIGHT_LEN);
-        id.numBI = Utils.extractString(buf, DOCUMENT_NUMBER_OFFSET, PTEID_NUMBI_LEN);
-        id.nameFather = Utils.extractString(buf, SURNAME_FATHER_OFFSET, PTEID_NAME_LEN);
-        id.firstnameFather = Utils.extractString(buf, GIVEN_NAME_FATHER_OFFSET, PTEID_NAME_LEN);
-        id.nameMother = Utils.extractString(buf, SURNAME_MOTHER_OFFSET, PTEID_NAME_LEN);
-        id.firstnameMother = Utils.extractString(buf, GIVEN_NAME_MOTHER_OFFSET, PTEID_NAME_LEN);
-        id.numNIF = Utils.extractString(buf, TAX_NUMBER_OFFSET, PTEID_NUMNIF_LEN);
-        id.numSS = Utils.extractString(buf, SOCIAL_SECURITY_NUMBER_OFFSET, PTEID_NUMSS_LEN);
-        id.numSNS = Utils.extractString(buf, HEALTH_NUMBER_OFFSET, PTEID_NUMSNS_LEN);
-        id.notes = Utils.extractString(buf, ACCIDENTAL_INDICATIONS_OFFSET, PTEID_INDICATIONEV_LEN);
-        id.mrz1 = Utils.extractString(buf, MRZ1_OFFSET, PTEID_MRZ_LEN);
-        id.mrz2 = Utils.extractString(buf, MRZ2_OFFSET, PTEID_MRZ_LEN);
-        id.mrz3 = Utils.extractString(buf, MRZ3_OFFSET, PTEID_MRZ_LEN);
+        id.deliveryEntity = PtEidUtils.extractString(buf, ISSUING_ENTITY_OFFSET, PTEID_DELIVERY_ENTITY_LEN);
+        id.country = PtEidUtils.extractString(buf, COUNTRY_OFFSET, PTEID_COUNTRY_LEN);
+        id.documentType = PtEidUtils.extractString(buf, DOCUMENT_TYPE_OFFSET, PTEID_DOCUMENT_TYPE_LEN);
+        id.cardNumber = PtEidUtils.extractString(buf, CARD_NUMBER_OFFSET, PTEID_CARDNUMBER_LEN);
+        id.cardNumberPAN = PtEidUtils.extractString(buf, CARD_NUMBER_PAN_OFFSET, PTEID_CARDNUMBER_PAN_LEN);
+        id.cardVersion = PtEidUtils.extractString(buf, CARD_VERSION_OFFSET, PTEID_CARDVERSION_LEN);
+        id.deliveryDate = PtEidUtils.extractString(buf, ISSUING_DATE_OFFSET, PTEID_DATE_LEN);
+        id.locale = PtEidUtils.extractString(buf, LOCAL_OF_REQUEST_OFFSET, PTEID_LOCALE_LEN);
+        id.validityDate = PtEidUtils.extractString(buf, EXPIRY_DATE_OFFSET, PTEID_DATE_LEN);
+        id.name = PtEidUtils.extractString(buf, SURNAME_OFFSET, PTEID_NAME_LEN);
+        id.firstname = PtEidUtils.extractString(buf, GIVEN_NAME_OFFSET, PTEID_NAME_LEN);
+        id.sex = PtEidUtils.extractString(buf, SEX_OFFSET, PTEID_SEX_LEN);
+        id.nationality = PtEidUtils.extractString(buf, NATIONALITY_OFFSET, PTEID_NATIONALITY_LEN);
+        id.birthDate = PtEidUtils.extractString(buf, DATE_OF_BIRTH_OFFSET, PTEID_DATE_LEN);
+        id.height = PtEidUtils.extractString(buf, HEIGHT_OFFSET, PTEID_HEIGHT_LEN);
+        id.numBI = PtEidUtils.extractString(buf, DOCUMENT_NUMBER_OFFSET, PTEID_NUMBI_LEN);
+        id.nameFather = PtEidUtils.extractString(buf, SURNAME_FATHER_OFFSET, PTEID_NAME_LEN);
+        id.firstnameFather = PtEidUtils.extractString(buf, GIVEN_NAME_FATHER_OFFSET, PTEID_NAME_LEN);
+        id.nameMother = PtEidUtils.extractString(buf, SURNAME_MOTHER_OFFSET, PTEID_NAME_LEN);
+        id.firstnameMother = PtEidUtils.extractString(buf, GIVEN_NAME_MOTHER_OFFSET, PTEID_NAME_LEN);
+        id.numNIF = PtEidUtils.extractString(buf, TAX_NUMBER_OFFSET, PTEID_NUMNIF_LEN);
+        id.numSS = PtEidUtils.extractString(buf, SOCIAL_SECURITY_NUMBER_OFFSET, PTEID_NUMSS_LEN);
+        id.numSNS = PtEidUtils.extractString(buf, HEALTH_NUMBER_OFFSET, PTEID_NUMSNS_LEN);
+        id.notes = PtEidUtils.extractString(buf, ACCIDENTAL_INDICATIONS_OFFSET, PTEID_INDICATIONEV_LEN);
+        id.mrz1 = PtEidUtils.extractString(buf, MRZ1_OFFSET, PTEID_MRZ_LEN);
+        id.mrz2 = PtEidUtils.extractString(buf, MRZ2_OFFSET, PTEID_MRZ_LEN);
+        id.mrz3 = PtEidUtils.extractString(buf, MRZ3_OFFSET, PTEID_MRZ_LEN);
 
         return id;
     }

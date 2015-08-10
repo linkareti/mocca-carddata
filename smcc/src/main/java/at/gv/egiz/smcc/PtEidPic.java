@@ -1,6 +1,10 @@
 package at.gv.egiz.smcc;
 
-public class PTEID_PIC {
+import java.nio.ByteBuffer;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class PtEidPic {
 
     // picture attributes offsets
     private static final short CBEFF_OFFSET = 0x5DF;
@@ -26,14 +30,14 @@ public class PTEID_PIC {
     public byte[] imageinfo;
     public byte[] picture;
 
-    public static PTEID_PIC parsePic(byte[] buf) {
+    public static PtEidPic parsePic(byte[] buf) {
 
-        PTEID_PIC pic = new PTEID_PIC();
+        PtEidPic pic = new PtEidPic();
         
-        pic.cbeff = Utils.extractRange(buf, CBEFF_OFFSET, PTEID_MAX_CBEFF_LEN);
-        pic.facialrechdr = Utils.extractRange(buf, FACIALRECHDR_OFFSET, PTEID_MAX_FACRECH_LEN);
-        pic.facialinfo = Utils.extractRange(buf, FACIALINFO_OFFSET, PTEID_MAX_FACINFO_LEN);
-        pic.imageinfo = Utils.extractRange(buf, IMAGEINFO_OFFSET, PTEID_MAX_IMAGEINFO_LEN);
+        pic.cbeff = PtEidUtils.extractRange(buf, CBEFF_OFFSET, PTEID_MAX_CBEFF_LEN);
+        pic.facialrechdr = PtEidUtils.extractRange(buf, FACIALRECHDR_OFFSET, PTEID_MAX_FACRECH_LEN);
+        pic.facialinfo = PtEidUtils.extractRange(buf, FACIALINFO_OFFSET, PTEID_MAX_FACINFO_LEN);
+        pic.imageinfo = PtEidUtils.extractRange(buf, IMAGEINFO_OFFSET, PTEID_MAX_IMAGEINFO_LEN);
 
         int k;
         int piclength = 0;
@@ -48,8 +52,16 @@ public class PTEID_PIC {
             throw new RuntimeException("Terminador da imagem não encontrado");
         }
 
-        pic.picture = Utils.extractRange(buf, PICTURE_OFFSET, piclength);
+        pic.picture = PtEidUtils.extractRange(buf, PICTURE_OFFSET, piclength);
 
         return pic;
+    }
+    
+    public Map<String, ByteBuffer> getPicture() {
+            return new LinkedHashMap<String, ByteBuffer>() {
+            {
+                put("picture", ByteBuffer.wrap(picture));               
+            }
+        };
     }
 }
