@@ -1,6 +1,7 @@
 package at.gv.egiz.smcc;
 
 import java.nio.ByteBuffer;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -57,11 +58,7 @@ public class PtEidPic {
         return pic;
     }
     
-    public Map<String, ByteBuffer> getPicture() {
-            return new LinkedHashMap<String, ByteBuffer>() {
-            {
-                put("picture", ByteBuffer.wrap(picture));               
-            }
-        };
+    public Map<String, byte[]> getPicture() {
+        return Collections.singletonMap("picture", picture);
     }
 }
