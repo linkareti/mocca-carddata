@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2011 by Graz University of Technology, Austria
+  MOCCA has been developed by the E-Government Innovation Center EGIZ, a joint
+  initiative of the Federal Chancellery Austria and Graz University of Technology.
+
+  Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+  the European Commission - subsequent versions of the EUPL (the "Licence");
+  You may not use this work except in compliance with the Licence.
+  You may obtain a copy of the Licence at:
+  http://www.osor.eu/eupl/
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the Licence is distributed on an "AS IS" basis,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the Licence for the specific language governing permissions and
+  limitations under the Licence.
+
+  This product combines work with different licenses. See the "NOTICE" text
+  file for details on the various modules and licenses.
+  The "NOTICE" text file is part of the distribution. Any derivative works
+  that you distribute must include a readable copy of the "NOTICE" text file.
+-->
+<AccessControl>
+	<Chains>
+		<!--
+			The input chain defines filters that are applied before command
+			execution
+		-->
+		<Chain Id="InputChain">
+			<Rules>
+				<!-- there is no command implemented that requires input filtering -->
+				<Rule Id="InputChain-AllowAll">
+					<Action>
+						<RuleAction>allow</RuleAction>
+					</Action>
+					<UserInteraction>confirm</UserInteraction>
+				</Rule>
+			</Rules>
+		</Chain>
+
+		<!--
+			The output chain defines filters that are applied after command
+			execution
+		-->
+		<Chain Id="OutputChain">
+			<Rules>
+				<Rule Id="OutputChain-Egov">
+					<AuthClass>anonymous</AuthClass>
+					<Action>
+						<RuleAction>allow</RuleAction>
+					</Action>
+					<UserInteraction>confirm</UserInteraction>
+				</Rule>
+				<Rule Id="OutputChain-Command">
+					<AuthClass>anonymous</AuthClass>
+					<Action>
+						<ChainRef>Command</ChainRef>
+					</Action>
+				</Rule>
+			</Rules>
+		</Chain>
+		<Chain Id="Command">
+			<Rules>
+				<Rule Id="cmd-rule-1">
+					<AuthClass>certified</AuthClass>
+					<Command Name="Infobox.*">
+						<Param Name="InfoboxIdentifier">IdentityLink</Param>
+						<Param Name="PersonIdentifier">derived</Param>
+					</Command>
+					<Action>
+						<RuleAction>allow</RuleAction>
+					</Action>
+					<UserInteraction>confirm</UserInteraction>
+				</Rule>
+				<Rule Id="cmd-rule-localhost">
+					<AuthClass>anonymous</AuthClass>
+					<IPv4Address>127.0.0.1</IPv4Address>
+					<Command Name="Infobox.*">
+						<Param Name="InfoboxIdentifier">IdentityLink</Param>
+						<Param Name="PersonIdentifier">derived</Param>
+					</Command>
+					<Action>
+						<RuleAction>allow</RuleAction>
+					</Action>
+					<UserInteraction>confirm</UserInteraction>
+				</Rule>
+				<Rule Id="cmd-rule-2">
+					<AuthClass>anonymous</AuthClass>
+					<Command Name="Infobox.*">
+						<Param Name="InfoboxIdentifier">IdentityLink</Param>
+					</Command>
+					<Action>
+						<RuleAction>deny</RuleAction>
+					</Action>
+					<UserInteraction>info</UserInteraction>
+				</Rule>
+				<Rule Id="cmd-rule-3">
+					<Action>
+						<RuleAction>allow</RuleAction>
+					</Action>
+				</Rule>
+			</Rules>
+		</Chain>
+	</Chains>
+</AccessControl>

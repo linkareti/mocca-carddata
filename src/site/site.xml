@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright 2011 by Graz University of Technology, Austria
+  MOCCA has been developed by the E-Government Innovation Center EGIZ, a joint
+  initiative of the Federal Chancellery Austria and Graz University of Technology.
+
+  Licensed under the EUPL, Version 1.1 or - as soon they will be approved by
+  the European Commission - subsequent versions of the EUPL (the "Licence");
+  You may not use this work except in compliance with the Licence.
+  You may obtain a copy of the Licence at:
+  http://www.osor.eu/eupl/
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the Licence is distributed on an "AS IS" basis,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the Licence for the specific language governing permissions and
+  limitations under the Licence.
+
+  This product combines work with different licenses. See the "NOTICE" text
+  file for details on the various modules and licenses.
+  The "NOTICE" text file is part of the distribution. Any derivative works
+  that you distribute must include a readable copy of the "NOTICE" text file.
+-->
+
+<project name="MOCCA">
+  <publishDate position="right"/>
+  <bannerLeft>
+    <name>MOCCA</name>
+    <src>/images/mocca-t_s.png</src>
+    <href>http://joinup.ec.europa.eu/site/mocca/</href>
+  </bannerLeft>
+
+  <version position="none"/>
+
+  <body>
+    <links>
+      <item name="Austrian Citizen Card" href="http://www.buergerkarte.at"/>
+      <item name="Digital Austria" href="http://www.digitales.oesterreich.gv.at/site/6497/Default.aspx"/>
+      <item name="EGIZ" href="http://www.egiz.gv.at" />
+      <item name="Federal Chancellery" href="http://www.bka.gv.at/"/>
+      <item name="Graz University of Technology" href="http://www.tugraz.at"/>
+    </links>
+
+    <menu name="MOCCA" inherit="true">
+      <item name="About" href="index.html"/>
+      <item name="News" href="http://joinup.ec.europa.eu/software/mocca/newsandblog/all"/>
+      <item name="Download" href="download.html"/>
+      <item name="Source" href="https://joinup.ec.europa.eu/svn/mocca"/>
+      <item name="Wiki" href="http://joinup.ec.europa.eu/software/mocca/wiki/mocca-wiki"/>
+      <item name="Tracker" href="http://jira.egovlabs.gv.at/browse/MOCCA"/>
+      <item name="What's new in 1.3?" href="new.html"/>
+    </menu>
+    
+    <menu ref="reports"/>
+
+    <menu ref="modules"/>
+
+  </body>
+
+</project>
