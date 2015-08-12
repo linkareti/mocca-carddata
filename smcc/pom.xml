@@ -50,17 +50,5 @@
       <version>1.6</version>
       <type>jar</type>
     </dependency>
-    <dependency>
-      <groupId>com.sun.media</groupId>
-      <artifactId>jai_imageio</artifactId>
-      <version>1.1</version>
-      <classifier>fixed</classifier>
-      <exclusions>
-        <exclusion>
-          <artifactId>jai_core</artifactId>
-          <groupId>javax.media</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
   </dependencies>
 </project>
