@@ -46,4 +46,16 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <distributionManagement>
+      <repository>
+          <id>linkare-releases</id>
+          <name>Linkare Releases Repository</name>
+          <url>https://nexus.linkare.com/content/repositories/releases</url>
+      </repository>
+      <snapshotRepository>
+          <id>linkare-snap-repo</id>
+          <name>Linkare Snapshots Repository</name>
+          <url>https://nexus.linkare.com/content/repositories/snapshots</url>
+      </snapshotRepository>
+  </distributionManagement>
 </project>
