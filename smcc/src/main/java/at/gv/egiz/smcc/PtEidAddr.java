@@ -15,7 +15,7 @@ public class PtEidAddr {
     private static final short DISTRICT_CODE_OFFSET = 0x6;
     private static final short DISTRICT_DESCRIPTION_OFFSET = 0xA;
     private static final short MUNICIPALITY_CODE_OFFSET = 0x6E;
-    private static final short MUNICIPALITY_DESCRIPTION_OFFSET = 0x76;//corrected to 0x76 original value 0x75 had a '0' char and return empry string
+    private static final short MUNICIPALITY_DESCRIPTION_OFFSET = 0x76;
     private static final short CIVIL_PARISH_CODE_OFFSET = 0xDA;
     private static final short CIVIL_PARISH_DESCRIPTION_OFFSET = 0xE6;
     private static final short ABBR_STREET_TYPE_OFFSET = 0x14A;
