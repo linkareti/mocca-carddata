@@ -1,8 +1,6 @@
 package at.gv.egiz.smcc;
 
-import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PtEidPic {

@@ -1,6 +1,5 @@
 package at.gv.egiz.smcc;
 
-import at.gv.egiz.smcc.PtEidUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
