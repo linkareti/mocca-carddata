@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.smartcardio.Card;
 import javax.smartcardio.CardTerminal;
@@ -141,5 +142,7 @@ public interface SignatureCard {
     Map<CardDataSet, Map<String, ?>> getCardData(
             KeyboxName keyboxName, PINGUI pinGUI, CardDataSet... datasets)
             throws SignatureCardException, InterruptedException;
+    
+    Set<CardDataSet> getSupportedCardDataSets();
 
 }

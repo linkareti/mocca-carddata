@@ -58,6 +58,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.gv.egiz.smcc.pin.gui.PINGUI;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  *
@@ -487,6 +489,11 @@ public class SWCard implements SignatureCard {
             throws SignatureCardException, InterruptedException {
         
         throw new IllegalArgumentException("Retrieving card data not supported.");
+    }
+    
+    @Override
+    public Set<CardDataSet> getSupportedCardDataSets() {
+        return Collections.emptySet();
     }
     
 }

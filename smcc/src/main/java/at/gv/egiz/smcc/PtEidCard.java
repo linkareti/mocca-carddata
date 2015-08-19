@@ -46,6 +46,8 @@ import org.slf4j.LoggerFactory;
 import at.gv.egiz.smcc.pin.gui.PINGUI;
 import at.gv.egiz.smcc.util.ISO7816Utils;
 import at.gv.egiz.smcc.util.SMCCHelper;
+import java.util.EnumSet;
+import java.util.Set;
 
 public class PtEidCard extends AbstractSignatureCard {
 
@@ -180,6 +182,11 @@ public class PtEidCard extends AbstractSignatureCard {
             log.info("Failed to get citizend address data", e);
             throw new SignatureCardException(e);
         }
+    }
+    
+    @Override
+    public Set<CardDataSet> getSupportedCardDataSets() {
+        return EnumSet.of(CardDataSet.HOLDER_DATA, CardDataSet.HOLDER_PICTURE, CardDataSet.HOLDER_ADDRESS);
     }
   
   @Override
