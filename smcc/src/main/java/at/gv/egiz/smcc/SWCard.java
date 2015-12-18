@@ -59,6 +59,7 @@ import org.slf4j.LoggerFactory;
 
 import at.gv.egiz.smcc.pin.gui.PINGUI;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -310,6 +311,12 @@ public class SWCard implements SignatureCard {
 
     
   }
+  
+  @Override
+    public List<byte[]> getCertificates(KeyboxName keyboxName, PINGUI pinGUI)
+            throws SignatureCardException, InterruptedException {
+        return Collections.singletonList(getCertificate(keyboxName, pinGUI));
+    }
 
   public byte[] getInfobox(String infobox, PINGUI provider, String domainId) throws SignatureCardException {
     

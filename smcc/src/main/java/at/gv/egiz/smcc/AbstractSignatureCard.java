@@ -28,6 +28,7 @@ import at.gv.egiz.smcc.pin.gui.PINGUI;
 import at.gv.egiz.smcc.reader.CardReader;
 import at.gv.egiz.smcc.reader.ReaderFactory;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -151,5 +152,12 @@ public abstract class AbstractSignatureCard implements SignatureCard {
     @Override
     public Set<CardDataSet> getSupportedCardDataSets() {
         return Collections.emptySet();
+    }
+    
+    @Override
+    @Exclusive
+    public List<byte[]> getCertificates(KeyboxName keyboxName, PINGUI pinGUI)
+            throws SignatureCardException, InterruptedException {
+        return Collections.singletonList(getCertificate(keyboxName, pinGUI));
     }
 }

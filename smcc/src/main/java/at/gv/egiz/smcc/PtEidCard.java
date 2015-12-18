@@ -32,8 +32,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
@@ -46,8 +51,6 @@ import org.slf4j.LoggerFactory;
 import at.gv.egiz.smcc.pin.gui.PINGUI;
 import at.gv.egiz.smcc.util.ISO7816Utils;
 import at.gv.egiz.smcc.util.SMCCHelper;
-import java.util.EnumSet;
-import java.util.Set;
 
 public class PtEidCard extends AbstractSignatureCard {
 
@@ -59,6 +62,8 @@ public class PtEidCard extends AbstractSignatureCard {
   private static final byte[] DF_ISSUES = {(byte) 0x5F, (byte) 0x00};
   
   private static final byte[] EF_SIGN_CERT = { (byte) 0xEF, (byte) 0x08 };
+  
+  private static final byte[] EF_SIGN_CA_CERT = { (byte) 0xEF, (byte) 0x0F };
   
   private static final PinInfo QS_PIN_SPEC = 
     new PinInfo(4, 4, "[0-9]",
@@ -97,7 +102,41 @@ public class PtEidCard extends AbstractSignatureCard {
     }
 
   }
+  
+  private byte[] getCACertificate(KeyboxName keyboxName, PINGUI provider)
+      throws SignatureCardException, InterruptedException {
 
+    try {
+      CardChannel channel = getCardChannel();
+      // SELECT applet
+      execSELECT_AID(channel, AID_APPLET);
+      // SELECT DF_ISSUES
+      execSELECT_FID(channel, DF_ISSUES);
+      // SELECT EF_SIGN_CERT
+      byte[] fcx = execSELECT_FID(channel, EF_SIGN_CA_CERT);
+      int maxsize = ISO7816Utils.getLengthFromFCx(fcx);
+      // READ BINARY
+      byte[] certificate = ISO7816Utils.readTransparentFileTLV(channel, maxsize, (byte) 0x30);
+      if (certificate == null) {
+        throw new NotActivatedException();
+      }
+      return certificate;
+    } catch (FileNotFoundException e) {
+      throw new NotActivatedException();
+    } catch (CardException e) {
+      log.info("Failed to get certificate.", e);
+      throw new SignatureCardException(e);
+    }
+
+  }
+
+    @Override
+    public List<byte[]> getCertificates(KeyboxName keyboxName, PINGUI pinGUI) throws SignatureCardException, InterruptedException {
+        byte[][] certs = new byte[][] { getCertificate(keyboxName, pinGUI), getCACertificate(keyboxName, pinGUI) };
+        
+        return Collections.unmodifiableList(Arrays.asList(certs));
+    }
+  
     @Override
     public Map<CardDataSet, Map<String, ?>> getCardData(
             KeyboxName keyboxName, PINGUI pinGUI, CardDataSet... datasets)
