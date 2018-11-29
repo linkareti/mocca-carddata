@@ -48,9 +48,9 @@
   </dependencies>
   <distributionManagement>
       <repository>
-          <id>linkare-releases</id>
+          <id>linkare-thirdparty</id>
           <name>Linkare Releases Repository</name>
-          <url>https://nexus.linkare.com/content/repositories/releases</url>
+          <url>https://nexus.linkare.com/content/repositories/thirdparty</url>
       </repository>
       <snapshotRepository>
           <id>linkare-snap-repo</id>
